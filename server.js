@@ -1,8 +1,8 @@
 
-var http  = require['http'];
-var fs    = require['fs'];
-var path  = require['path'];
-var mime  = require['mime'];
+var http  = require('http');
+var fs    = require('fs');
+var path  = require('path');
+var mime  = require('mime');
 var cache = {};
 
 function send404 (res) {
@@ -40,3 +40,19 @@ function serveStatic (res, cache, absPath) {
     });
   }
 }
+
+var server = http.createServer(function (req, res) {
+  var filePath = false;
+  if (req.url === '/') {
+    filePath = 'public/index.html';
+  } else {
+    filePath = 'public' + req.url;
+  }
+  var absPath = './' + filePath;
+  serveStatic(res, cache, absPath);
+});
+
+// start server
+server.listen(3000, function () {
+  console.log("server running on port 3000.")
+})
